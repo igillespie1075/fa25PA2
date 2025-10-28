@@ -96,7 +96,7 @@ int buildEncodingTree(int nextFree) {
 
     while (heap.size > 1) {
 
-        int left = heap.pop(weightArr);
+        int left = heap.pop(weightArr); //
         int right = heap.pop(weightArr);
         int parent = nextFree++;
         weightArr[parent] = weightArr[left] + weightArr[right];
