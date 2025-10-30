@@ -122,6 +122,24 @@ int buildEncodingTree(int nextFree) {
 
 // Step 4: Use an STL stack to generate codes
 void generateCodes(int root, string codes[]) {
+    stack<pair<int, string>> st;
+    st.push({root, ""});
+
+    while (!st.empty()) {
+        pair<int, string> current = st.top();
+        int node = current.first;
+        string code = current.second;
+        st.pop();
+
+        if (leftArr[node] >= -1 && rightArr[node] >= -1) {
+            char ch = charArr[node];
+            if (ch >= 'a' && ch <= 'z')
+                codes[ch - 'a'] = code;
+        }else {
+
+        }
+    }
+    cout << "Generated codes: \n";
     // TODO:
     // Use stack<pair<int, string>> to simulate DFS traversal.
     // Left edge adds '0', right edge adds '1'.
