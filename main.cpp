@@ -96,7 +96,7 @@ int buildEncodingTree(int nextFree) {
 
     while (heap.size > 1) {
 
-        int left = heap.pop(weightArr); //
+        int left = heap.pop(weightArr); //push leaf nose indices into heap
         int right = heap.pop(weightArr);
         int parent = nextFree++;
         weightArr[parent] = weightArr[left] + weightArr[right];
@@ -136,7 +136,11 @@ void generateCodes(int root, string codes[]) {
             if (ch >= 'a' && ch <= 'z')
                 codes[ch - 'a'] = code;
         }else {
+            if (rightArr[node] != -1)
+                st.push({rightArr[node], code + "1"});
 
+            if (leftArr[node] != -1)
+                st.push({leftArr[node], code + "0"});
         }
     }
     cout << "Generated codes: \n";
