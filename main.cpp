@@ -90,22 +90,24 @@ int createLeafNodes(int freq[]) {
 // Step 3: Build the encoding tree using heap operations
 int buildEncodingTree(int nextFree) {
 
-    MinHeap heap;
+    MinHeap heap;                           //push the leaf nodes in te heap
      for (int i = 0; i < nextFree; ++i)
          heap.push(i, weightArr);
 
     while (heap.size > 1) {
 
-        int left = heap.pop(weightArr); //push leaf nose indices into heap
+        int left = heap.pop(weightArr); // pop two smallest nodes
         int right = heap.pop(weightArr);
-        int parent = nextFree++;
+        int parent = nextFree++;           //Create new parent node and combine weight
         weightArr[parent] = weightArr[left] + weightArr[right];
-        leftArr[parent] = left;
+        leftArr[parent] = left;         //Store structure of the tree, index of left and right, internal node placeholder
         rightArr[parent] = right;
-        heap.push(parent, weightArr);
+        charArr[parent] = '*';
+        heap.push(parent, weightArr);       //Parent back into heap
 
     }
-    int root = heap.pop(weightArr);
+    int root = heap.pop(weightArr);    //Root of tree
+    cout << "Encoding tree is built root index = " << root << "\n";
     return root;
 
     // TODO:
@@ -127,23 +129,27 @@ void generateCodes(int root, string codes[]) {
 
     while (!st.empty()) {
         pair<int, string> current = st.top();
+        st.pop();
         int node = current.first;
         string code = current.second;
-        st.pop();
 
-        if (leftArr[node] >= -1 && rightArr[node] >= -1) {
+        int left = leftArr[node];
+        int right = rightArr[node];
+
+                                         // Record the code
+        if (left == -1 && right == -1) {
             char ch = charArr[node];
             if (ch >= 'a' && ch <= 'z')
                 codes[ch - 'a'] = code;
-        }else {
-            if (rightArr[node] != -1)
-                st.push({rightArr[node], code + "1"});
+        }else {                           //Adds '0' when you go left/ Adds '1' when you go right.
+            if (right != -1)
+                st.push({right, code + "1"});
 
-            if (leftArr[node] != -1)
-                st.push({leftArr[node], code + "0"});
+            if (left != -1)
+                st.push({left, code + "0"});
         }
     }
-    cout << "Generated codes: \n";
+
     // TODO:
     // Use stack<pair<int, string>> to simulate DFS traversal.
     // Left edge adds '0', right edge adds '1'.
